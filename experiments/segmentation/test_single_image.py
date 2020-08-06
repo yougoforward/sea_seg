@@ -53,6 +53,8 @@ def test(args):
     evaluator.eval()
 
     if os.path.isdir(args.input_path):
+        if not os.path.exists(args.save_path):
+            os.makedirs(args.save_path)
         im_list = os.listdir(args.input_path)
         for i in im_list:
             im_path = os.path.join(args.input_path, im_list[i])
@@ -61,6 +63,7 @@ def test(args):
                 output = evaluator.parallel_forward(img)[0]
                 predict = torch.max(output, 1)[1].cpu().numpy()
             mask = utils.get_mask_pallete(predict, args.dataset)
+
             out_path = os.path.join(args.save_path, im_list[i].split('.')[0]+'.png')
             mask.save(out_path)
     else:
