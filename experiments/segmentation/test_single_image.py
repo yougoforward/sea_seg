@@ -19,7 +19,7 @@ from encoding.models import get_model, get_segmentation_model
 from encoding.models import MultiEvalModule_whole as MultiEvalModule
 
 from .option import Options
-
+import numpy as np
 
 def test(args):
     # data transforms
