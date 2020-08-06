@@ -56,7 +56,9 @@ def test(args):
         if not os.path.exists(args.save_path):
             os.makedirs(args.save_path)
         im_list = os.listdir(args.input_path)
+        i=0
         for im in im_list:
+            print(i++)
             im_path = os.path.join(args.input_path, im)
             image = Image.open(im_path).convert('RGB')
             img = input_transform(image).unsqueeze(0)
