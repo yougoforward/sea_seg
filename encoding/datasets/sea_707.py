@@ -24,7 +24,7 @@ class SeaSegmentation(BaseDataset):
         super(SeaSegmentation, self).__init__(root, split, mode, transform,
                                               target_transform, **kwargs)
         _voc_root = os.path.join(self.root, self.BASE_DIR)
-        _mask_dir = os.path.join(_voc_root, 'label')
+        _mask_dir = os.path.join(_voc_root, 'label_raw')
         _image_dir = os.path.join(_voc_root, 'image')
         # train/val/test splits are pre-cut
         _splits_dir = os.path.join(_voc_root, 'splits')
