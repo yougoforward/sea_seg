@@ -6,7 +6,7 @@ from .encnet import *
 from .fcn import *
 
 from .cfpn_gsf import *
-
+from .cfpn import *
 def get_segmentation_model(name, **kwargs):
     from .fcn import get_fcn
     models = {
@@ -14,6 +14,7 @@ def get_segmentation_model(name, **kwargs):
         'encnet': get_encnet,
 
         'cfpn_gsf': get_cfpn_gsf,
+        'cfpn': get_cfpn,
 
     }
     return models[name.lower()](**kwargs)
