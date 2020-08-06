@@ -71,7 +71,7 @@ def test(args):
             mask =  np.array(mask).astype(np.uint8)
             image = np.array(image).astype(np.uint8)
             att = predict.squeeze()
-            image[att] = image[att]*0.5+mask[att]*0.5
+            image[att==1] = image[att==1]*0.5+mask[att==1]*0.5
             mask = Image.fromarray(image)
             out_path = os.path.join(args.save_path, im)
             mask.save(out_path)
