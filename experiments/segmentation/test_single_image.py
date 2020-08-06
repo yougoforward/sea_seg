@@ -65,6 +65,7 @@ def test(args):
                 output = evaluator.parallel_forward(img)[0]
                 predict = torch.max(output, 1)[1].cpu().numpy()
             mask = utils.get_mask_pallete(predict, args.dataset)
+            print(mask.shape)
             print(str(i)+'\t'+im)
             i=i+1
 
