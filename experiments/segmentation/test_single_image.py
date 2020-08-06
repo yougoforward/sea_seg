@@ -68,11 +68,11 @@ def test(args):
             print(str(i)+'\t'+im)
             i=i+1
 
-            # mask =  np.array(mask).astype(np.uint8)
-            # image = np.array(image).astype(np.uint8)
-            # att = predict.squeeze()
-            # image[att==1] = image[att==1]*0.5+mask[att==1]*0.5
-            # mask = Image.fromarray(image)
+            mask =  np.array(mask).astype(np.uint8)
+            image = np.array(image).astype(np.uint8)
+            att = predict.squeeze()
+            image[att==1] = image[att==1]*0.5+mask[att==1]*0.5
+            mask = Image.fromarray(image)
             out_path = os.path.join(args.save_path, im.split('.')[0]+'.png')
             mask.save(out_path)
     else:
