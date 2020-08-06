@@ -59,7 +59,7 @@ def test(args):
         i=0
         for im in im_list:
             i=i+1
-            print(i)
+            print(str(i)+'\t'+im)
             im_path = os.path.join(args.input_path, im)
             image = Image.open(im_path).convert('RGB')
             img = input_transform(image).unsqueeze(0)
