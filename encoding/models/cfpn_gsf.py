@@ -40,10 +40,7 @@ class cfpn_gsfHead(nn.Module):
         self._up_kwargs = up_kwargs
 
         inter_channels = in_channels // 8
-        self.conv5 = nn.Sequential(nn.Conv2d(in_channels, inter_channels, 3, padding=1, bias=False),
-                                   norm_layer(inter_channels),
-                                   nn.ReLU(),
-                                   )
+
         self.gap = nn.Sequential(nn.AdaptiveAvgPool2d(1),
                             nn.Conv2d(in_channels, inter_channels, 1, bias=False),
                             norm_layer(inter_channels),
@@ -55,7 +52,6 @@ class cfpn_gsfHead(nn.Module):
 
         self.conv6 = nn.Sequential(nn.Dropout2d(0.1), nn.Conv2d(2*inter_channels, out_channels, 1))
 
-        # self.localUp2=localUp(256, in_channels, norm_layer, up_kwargs)
         self.localUp3=localUp(512, inter_channels, norm_layer, up_kwargs)
         self.localUp4=localUp(1024, inter_channels, norm_layer, up_kwargs)
 
@@ -98,7 +94,6 @@ class cfpn_gsfHead(nn.Module):
                                    )
     def forward(self, c1,c2,c3,c4):
         _,_, h,w = c2.size()
-        # out4 = self.conv5(c4)
         p4_1 = self.dconv4_1(c4)
         p4_8 = self.dconv4_8(c4)
         out4 = self.project4(torch.cat([p4_1,p4_8], dim=1))
@@ -111,7 +106,7 @@ class cfpn_gsfHead(nn.Module):
         out2 = self.localUp3(c2, out3)
         p2_1 = self.dconv2_1(out2)
         p2_8 = self.dconv2_8(out2)
-        # out = self.localUp2(c1, out)
+        
         p4_1 = F.interpolate(p4_1, (h,w), **self._up_kwargs)
         p4_8 = F.interpolate(p4_8, (h,w), **self._up_kwargs)
         p3_1 = F.interpolate(p3_1, (h,w), **self._up_kwargs)
