@@ -30,6 +30,8 @@ class SeaSegmentation(BaseDataset):
         _splits_dir = os.path.join(_voc_root, 'splits')
         if self.split == 'train':
             _split_f = os.path.join(_splits_dir, 'train.txt')
+        elif self.split == 'trainval':
+            _split_f = os.path.join(_splits_dir, 'trainval.txt')
         elif self.split == 'val':
             _split_f = os.path.join(_splits_dir, 'val.txt')
         elif self.split == 'test':
