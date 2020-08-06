@@ -15,7 +15,8 @@ from PIL import Image
 
 from encoding.nn import BatchNorm
 from encoding.datasets import datasets
-from encoding.models import get_model, get_segmentation_model, MultiEvalModule
+from encoding.models import get_model, get_segmentation_model
+from encoding.models import MultiEvalModule_whole as MultiEvalModule
 
 from .option import Options
 
@@ -51,13 +52,26 @@ def test(args):
     evaluator = MultiEvalModule(model, num_classes, scales=scales, flip=args.ms).cuda()
     evaluator.eval()
 
-    img = input_transform(Image.open(args.input_path).convert('RGB')).unsqueeze(0)
+    if os.path.isdir(args.input_path):
+        im_list = os.listdir(args.input_path)
+        for i in im_list:
+            im_path = os.path.join(args.input_path, im_list[i])
+            img = input_transform(Image.open(im_path).convert('RGB')).unsqueeze(0)
+            with torch.no_grad():
+                output = evaluator.parallel_forward(img)[0]
+                predict = torch.max(output, 1)[1].cpu().numpy()
+            mask = utils.get_mask_pallete(predict, args.dataset)
+            out_path = os.path.join(args.save_path, im_list[i].split('.')[0]+'.png')
+            mask.save(out_path)
+    else:
+        img = input_transform(Image.open(args.input_path).convert('RGB')).unsqueeze(0)
 
-    with torch.no_grad():
-        output = evaluator.parallel_forward(img)[0]
-        predict = torch.max(output, 1)[1].cpu().numpy()
-    mask = utils.get_mask_pallete(predict, args.dataset)
-    mask.save(args.save_path)
+        with torch.no_grad():
+            output = evaluator.parallel_forward(img)[0]
+            predict = torch.max(output, 1)[1].cpu().numpy()
+        mask = utils.get_mask_pallete(predict, args.dataset)
+        mask.save(args.save_path)
+
 
 
 if __name__ == "__main__":
