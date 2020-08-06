@@ -64,35 +64,14 @@ class BaseNet(nn.Module):
         x = self.pretrained.maxpool(x)
         c1 = self.pretrained.layer1(x)
 
-        for i in range(len(self.pretrained.layer2)):
-            if i==0:
-                c20 = self.pretrained.layer2[i](c1)
-                c2 = c20
-            else:
-                c2 = self.pretrained.layer2[i](c2)
-        for i in range(len(self.pretrained.layer3)):
-            if i==0:
-                c30 = self.pretrained.layer3[i](c2)
-                c3 = c30
-            else:
-                c3 = self.pretrained.layer3[i](c3)
-        for i in range(len(self.pretrained.layer4)):
-            if i==0:
-                c40 = self.pretrained.layer4[i](c3)
-                c4 = c40
-            else:
-                c4 = self.pretrained.layer4[i](c4)
-        # c2 = self.pretrained.layer2(c1)
-        # c3 = self.pretrained.layer3(c2)
-        # c4 = self.pretrained.layer4(c3)
-        # print(c3.size())
-        # print(c4.size())
-        # print(self.jpu)
+        c2 = self.pretrained.layer2(c1)
+        c3 = self.pretrained.layer3(c2)
+        c4 = self.pretrained.layer4(c3)
         if self.jpu:
             c1, c2, c3, c4 = self.jpu(c1, c2, c3, c4)
-            return c1, c2, c3, c4, c20, c30, c40
+            return c1, c2, c3, c4
         else:
-            return c1, c2, c3, c4, c20, c30, c40
+            return c1, c2, c3, c4
 
     def evaluate(self, x, target=None):
         pred = self.forward(x)
