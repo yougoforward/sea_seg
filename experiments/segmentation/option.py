@@ -106,7 +106,7 @@ class Options():
                 'ade20k': 120,
                 'cocostuff': 180,
                 'focus_shi': 40,
-                'sea': 80,
+                'sea': 120,
             }
             args.epochs = epoches[args.dataset.lower()]
         if args.batch_size is None:
