@@ -58,12 +58,18 @@ def test(args):
         im_list = os.listdir(args.input_path)
         for im in im_list:
             im_path = os.path.join(args.input_path, im)
-            img = input_transform(Image.open(im_path).convert('RGB')).unsqueeze(0)
+            image = Image.open(im_path).convert('RGB')
+            img = input_transform(image).unsqueeze(0)
             with torch.no_grad():
                 output = evaluator.parallel_forward(img)[0]
                 predict = torch.max(output, 1)[1].cpu().numpy()
             mask = utils.get_mask_pallete(predict, args.dataset)
 
+            mask =  np.array(mask).astype(np.uint8)
+            image = np.array(image).astype(np.uint8)
+            att = predict.squeeze()
+            image[att] = image[att]*0.5+mask[att]*0.5
+            mask = Image.fromarray(image)
             out_path = os.path.join(args.save_path, im.split('.')[0]+'.png')
             mask.save(out_path)
     else:
