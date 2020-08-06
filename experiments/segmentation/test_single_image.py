@@ -72,6 +72,7 @@ def test(args):
             image = np.array(image).astype(np.uint8)
             # print(predict.shape)
             # print(predict.squeeze().shape)
+            print(mask.shape)
             att = predict.squeeze()
             att = np.expand_dims(att,axis=2)
             att = np.tile(att, (1,1,3))

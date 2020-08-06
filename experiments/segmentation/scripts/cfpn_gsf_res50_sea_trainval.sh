@@ -1,6 +1,6 @@
 # !/usr/bin/env bash
 # train
-python -m experiments.segmentation.train --dataset sea --train_split trainval \
+python -m experiments.segmentation.train --dataset sea --train-split trainval \
     --model cfpn_gsf --aux --base-size 520 --crop-size 520 \
     --backbone resnet50 --checkname cfpn_gsf_res50_sea
 
