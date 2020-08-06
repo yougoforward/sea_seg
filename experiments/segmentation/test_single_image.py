@@ -69,11 +69,11 @@ def test(args):
             print(str(i)+'\t'+im)
             i=i+1
 
-            mask =  np.array(mask).astype(np.uint8)
+            mask =  np.array(mask.convert('RGB')).astype(np.uint8)
             image = np.array(image).astype(np.uint8)
             # print(predict.shape)
             # print(predict.squeeze().shape)
-            print(mask.shape)
+            # print(mask.shape)
             att = predict.squeeze()
             att = np.expand_dims(att,axis=2)
             att = np.tile(att, (1,1,3))
