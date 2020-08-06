@@ -70,9 +70,11 @@ def test(args):
 
             mask =  np.array(mask).astype(np.uint8)
             image = np.array(image).astype(np.uint8)
-            print(predict.shape)
-            print(predict.squeeze().shape)
-            att = predict[0][0]
+            # print(predict.shape)
+            # print(predict.squeeze().shape)
+            att = predict.squeeze()
+            att = np.expand_dims(att,axis=2)
+            att = np.tile(att, (1,1,3))
             image = image*(1-att)+image*att*0.5+mask*att*0.5
             mask = Image.fromarray(image)
             out_path = os.path.join(args.save_path, im.split('.')[0]+'.png')
