@@ -75,7 +75,7 @@ def test(args):
             # print(mask.shape)
             att = predict.squeeze()
             att = np.expand_dims(att,axis=2)
-            att = np.tile(att, (1,1,3))
+            # att = np.tile(att, (1,1,3))
             image = image*(1-att)+image*att*0.5+mask*att*0.5
             mask = Image.fromarray(image)
             out_path = os.path.join(args.save_path, im.split('.')[0]+'.png')
