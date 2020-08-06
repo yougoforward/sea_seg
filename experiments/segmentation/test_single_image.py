@@ -73,7 +73,7 @@ def test(args):
             # att = predict.squeeze()
             # image[att==1] = image[att==1]*0.5+mask[att==1]*0.5
             # mask = Image.fromarray(image)
-            out_path = os.path.join(args.save_path, im)
+            out_path = os.path.join(args.save_path, im.split('.')[0]+'.png')
             mask.save(out_path)
     else:
         img = input_transform(Image.open(args.input_path).convert('RGB')).unsqueeze(0)
