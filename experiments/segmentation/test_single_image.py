@@ -58,9 +58,6 @@ def test(args):
         im_list = os.listdir(args.input_path)
         i=0
         for im in im_list:
-            print(str(i)+'\t'+im)
-            i=i+1
-
             im_path = os.path.join(args.input_path, im)
             image = Image.open(im_path).convert('RGB')
             img = input_transform(image).unsqueeze(0)
@@ -68,6 +65,8 @@ def test(args):
                 output = evaluator.parallel_forward(img)[0]
                 predict = torch.max(output, 1)[1].cpu().numpy()
             mask = utils.get_mask_pallete(predict, args.dataset)
+            print(str(i)+'\t'+im)
+            i=i+1
 
             mask =  np.array(mask).astype(np.uint8)
             image = np.array(image).astype(np.uint8)
