@@ -35,7 +35,7 @@ class SeaSegmentation(BaseDataset):
         elif self.split == 'val':
             _split_f = os.path.join(_splits_dir, 'val.txt')
         elif self.split == 'test':
-            _split_f = os.path.join(_splits_dir, 'val.txt')
+            _split_f = os.path.join(_splits_dir, 'test.txt')
         else:
             raise RuntimeError('Unknown dataset split.')
         self.images = []
