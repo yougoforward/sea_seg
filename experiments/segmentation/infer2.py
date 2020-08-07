@@ -94,7 +94,7 @@ def test(args):
     evaluator = MultiEvalModule(model, testset.num_class, scales=scales, flip=args.ms).cuda()
     evaluator.eval()
     tbar = tqdm(test_data)
-    total_inter, total_union, total_correct, total_label, all_label = 0, 0, 0, 0, 0
+    total_inter, total_union, total_correct, total_label = 0, 0, 0, 0
     
     result = []
     for i, (image, dst) in enumerate(tbar):
@@ -116,17 +116,13 @@ def test(args):
 
             class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
             class_IoU = 1.0 * inter / (np.spacing(1) + union)
-            class_mIoU = class_IoU.mean()
-            print("img pixAcc:", img_pixAcc)
             print("img Classes pixAcc:", class_pixAcc)
             print("img Classes IoU:", class_IoU)
     # compute set IoU metric
-    total_pixAcc = 1.0 * total_correct / (np.spacing(1) + all_label)
     pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
     IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
     mIoU = IoU.mean()
 
-    print("set pixAcc:", pixAcc)
     print("set Classes pixAcc:", pixAcc)
     print("set Classes IoU:", IoU)
     print("set mean IoU:", mIoU)
