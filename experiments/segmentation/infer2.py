@@ -100,11 +100,11 @@ def test(args):
     for i, (image, dst) in enumerate(tbar):
         # print(dst)
         with torch.no_grad():
-            if i>50:
+            if i>20:
                 st = time.time()
             outputs = evaluator.parallel_forward(image)[0]
                 
-            if i>50:
+            if i>20:
                 result.append(1/(time.time()-st))
                 print(np.mean(result), np.std(result))
 
