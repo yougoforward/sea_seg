@@ -71,6 +71,7 @@ def test(args):
     total_inter, total_union, total_correct, total_label = 0, 0, 0, 0
 
     for i, (image, dst) in enumerate(tbar):
+        print(dst)
         with torch.no_grad():
             outputs = evaluator.parallel_forward(image)[0]
             correct, labeled = utils.batch_pix_accuracy(outputs, dst)
