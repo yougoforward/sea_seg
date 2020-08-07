@@ -102,7 +102,7 @@ def test(args):
         with torch.no_grad():
             if i>20:
                 st = time.time()
-            outputs = evaluator.forward(image[0])
+            outputs = evaluator.forward(image[0].unsqueeze(0).cuda())
                 
             if i>20:
                 result.append(1/(time.time()-st))
