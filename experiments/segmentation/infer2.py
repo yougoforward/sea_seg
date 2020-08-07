@@ -102,7 +102,7 @@ def test(args):
         with torch.no_grad():
             if i>20:
                 st = time.time()
-            outputs = evaluator.parallel_forward(image)[0]
+            outputs = evaluator.forward(image[0])[0]
                 
             if i>20:
                 result.append(1/(time.time()-st))
