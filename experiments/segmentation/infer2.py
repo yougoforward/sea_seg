@@ -21,6 +21,8 @@ from encoding.models import get_model, get_segmentation_model
 from encoding.models import MultiEvalModule_whole as MultiEvalModule
 from .option import Options
 import numpy as np
+import time
+
 def batch_intersection_union(output, target, nclass):
     """Batch Intersection of Union
     Args:
