@@ -79,7 +79,7 @@ def test(args):
                 tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
         else:
             with torch.no_grad():
-                outputs = evaluator.parallel_forward(image)
+                outputs = evaluator.parallel_forward(image[0])[0]
                 print(image)
                 print(outputs)
                 # predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
