@@ -145,9 +145,9 @@ def test(args):
         if 'val' in args.mode:
             with torch.no_grad():
                 predicts = evaluator.parallel_forward(image)
-                metric.update(dst[0], predicts[0])
-                pixAcc, mIoU = metric.get()
-                tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
+                # metric.update(dst[0], predicts[0])
+                # pixAcc, mIoU = metric.get()
+                # tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
         else:
             with torch.no_grad():
                 outputs = evaluator.parallel_forward(image)
