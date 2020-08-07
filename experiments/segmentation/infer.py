@@ -111,52 +111,52 @@ def test(args):
     tbar = tqdm(test_data)
     total_inter, total_union, total_correct, total_label, all_label = 0, 0, 0, 0, 0
 
-    for i, (image, dst) in enumerate(tbar):
-        # print(dst)
-        with torch.no_grad():
-            outputs = evaluator.parallel_forward(image)[0]
-            correct, labeled = batch_pix_accuracy(outputs, dst[0])
-            total_correct += correct
-            all_label += labeled
-            img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
-
-            inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
-            total_label += area_lab
-            total_inter += inter
-            total_union += union
-
-            class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
-            class_IoU = 1.0 * inter / (np.spacing(1) + union)
-            class_mIoU = class_IoU.mean()
-            print("img pixAcc:", img_pixAcc)
-            print("img Classes pixAcc:", class_pixAcc)
-            print("img Classes IoU:", class_IoU)
-    total_pixAcc = 1.0 * total_correct / (np.spacing(1) + all_label)
-    pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
-    IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
-    mIoU = IoU.mean()
-
-    print("set pixAcc:", pixAcc)
-    print("set Classes pixAcc:", pixAcc)
-    print("set Classes IoU:", IoU)
-    print("set mean IoU:", mIoU)
-
     # for i, (image, dst) in enumerate(tbar):
-    #     if 'val' in args.mode:
-    #         with torch.no_grad():
-    #             predicts = evaluator.parallel_forward(image)
-    #             metric.update(dst, predicts)
-    #             pixAcc, mIoU = metric.get()
-    #             tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
-    #     else:
-    #         with torch.no_grad():
-    #             outputs = evaluator.parallel_forward(image)
-    #             predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
-    #                         for output in outputs]
-    #         for predict, impath in zip(predicts, dst):
-    #             mask = utils.get_mask_pallete(predict, args.dataset)
-    #             outname = os.path.splitext(impath)[0] + '.png'
-    #             mask.save(os.path.join(outdir, outname))
+    #     # print(dst)
+    #     with torch.no_grad():
+    #         outputs = evaluator.parallel_forward(image)[0]
+    #         correct, labeled = batch_pix_accuracy(outputs, dst[0])
+    #         total_correct += correct
+    #         all_label += labeled
+    #         img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
+
+    #         inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
+    #         total_label += area_lab
+    #         total_inter += inter
+    #         total_union += union
+
+    #         class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
+    #         class_IoU = 1.0 * inter / (np.spacing(1) + union)
+    #         class_mIoU = class_IoU.mean()
+    #         print("img pixAcc:", img_pixAcc)
+    #         print("img Classes pixAcc:", class_pixAcc)
+    #         print("img Classes IoU:", class_IoU)
+    # total_pixAcc = 1.0 * total_correct / (np.spacing(1) + all_label)
+    # pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
+    # IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
+    # mIoU = IoU.mean()
+
+    # print("set pixAcc:", pixAcc)
+    # print("set Classes pixAcc:", pixAcc)
+    # print("set Classes IoU:", IoU)
+    # print("set mean IoU:", mIoU)
+
+    for i, (image, dst) in enumerate(tbar):
+        if 'val' in args.mode:
+            with torch.no_grad():
+                predicts = evaluator.parallel_forward(image)
+                metric.update(dst[0], predicts[0])
+                pixAcc, mIoU = metric.get()
+                tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
+        else:
+            with torch.no_grad():
+                outputs = evaluator.parallel_forward(image)
+                predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
+                            for output in outputs]
+            for predict, impath in zip(predicts, dst):
+                mask = utils.get_mask_pallete(predict, args.dataset)
+                outname = os.path.splitext(impath)[0] + '.png'
+                mask.save(os.path.join(outdir, outname))
 
 if __name__ == "__main__":
     args = Options().parse()
