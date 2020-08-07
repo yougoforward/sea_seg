@@ -82,7 +82,7 @@ def test(args):
                 outputs = evaluator.parallel_forward(image)
                 predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
                             for output in outputs]
-                correct, labeled = utils.batch_pix_accuracy(pred.data, target)
+                correct, labeled = utils.batch_pix_accuracy(outputs, dst)
                 total_correct += correct
                 all_label += labeled
                 img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
