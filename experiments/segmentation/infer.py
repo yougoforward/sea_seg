@@ -80,8 +80,8 @@ def test(args):
         else:
             with torch.no_grad():
                 outputs = evaluator.parallel_forward(image[0])[0]
-                print(image)
-                print(outputs)
+                # print(image)
+                # print(outputs)
                 # predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
                 #             for output in outputs]
                 correct, labeled = utils.batch_pix_accuracy(outputs, dst)
