@@ -103,7 +103,7 @@ def test(args):
             result.append(1/(time.time()-st))
             print(np.mean(result), np.std(result))
 
-            # compute IoU metric
+            # compute image IoU metric
             inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
             total_label += area_lab
             total_inter += inter
@@ -115,7 +115,7 @@ def test(args):
             print("img pixAcc:", img_pixAcc)
             print("img Classes pixAcc:", class_pixAcc)
             print("img Classes IoU:", class_IoU)
-    
+    # compute set IoU metric
     total_pixAcc = 1.0 * total_correct / (np.spacing(1) + all_label)
     pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
     IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
