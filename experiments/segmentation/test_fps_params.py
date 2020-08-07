@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     model.cuda()
     model.eval()
-    x = torch.Tensor(1, 3, 321, 321).cuda()
+    x = torch.Tensor(1, 3, args.crop_size, args.crop_size).cuda()
 
     N = 50
     with torch.no_grad():
