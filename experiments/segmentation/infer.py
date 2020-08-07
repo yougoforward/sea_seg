@@ -71,40 +71,24 @@ def test(args):
     total_inter, total_union, total_correct, total_label = 0, 0, 0, 0
 
     for i, (image, dst) in enumerate(tbar):
-        if 'val' in args.mode:
-            with torch.no_grad():
-                predicts = evaluator.parallel_forward(image)
-                metric.update(dst, predicts)
-                pixAcc, mIoU = metric.get()
-                tbar.set_description( 'pixAcc: %.4f, mIoU: %.4f' % (pixAcc, mIoU))
-        else:
-            with torch.no_grad():
-                outputs = evaluator.parallel_forward(image)[0]
-                # print(image)
-                # print(outputs)
-                # predicts = [testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
-                #             for output in outputs]
-                correct, labeled = utils.batch_pix_accuracy(outputs, dst)
-                total_correct += correct
-                all_label += labeled
-                img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
+        with torch.no_grad():
+            outputs = evaluator.parallel_forward(image)[0]
+            correct, labeled = utils.batch_pix_accuracy(outputs, dst)
+            total_correct += correct
+            all_label += labeled
+            img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
 
-                inter, union, area_pred, area_lab = utils.batch_intersection_union(outputs, dst, testset.num_class)
-                total_label += area_lab
-                total_inter += inter
-                total_union += union
+            inter, union, area_pred, area_lab = utils.batch_intersection_union(outputs, dst, testset.num_class)
+            total_label += area_lab
+            total_inter += inter
+            total_union += union
 
-                class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
-                class_IoU = 1.0 * inter / (np.spacing(1) + union)
-                class_mIoU = class_IoU.mean()
-                print("img pixAcc:", img_pixAcc)
-                print("img Classes pixAcc:", class_pixAcc)
-                print("img Classes IoU:", class_IoU)
-
-            # for predict, impath in zip(predicts, dst):
-            #     mask = utils.get_mask_pallete(predict, args.dataset)
-            #     outname = os.path.splitext(impath)[0] + '.png'
-            #     mask.save(os.path.join(outdir, outname))
+            class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
+            class_IoU = 1.0 * inter / (np.spacing(1) + union)
+            class_mIoU = class_IoU.mean()
+            print("img pixAcc:", img_pixAcc)
+            print("img Classes pixAcc:", class_pixAcc)
+            print("img Classes IoU:", class_IoU)
     total_pixAcc = 1.0 * total_correct / (np.spacing(1) + all_label)
     pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
     IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
