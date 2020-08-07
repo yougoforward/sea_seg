@@ -100,10 +100,13 @@ def test(args):
     for i, (image, dst) in enumerate(tbar):
         # print(dst)
         with torch.no_grad():
-            st = time.time()
+            if i>0:
+                st = time.time()
             outputs = evaluator.parallel_forward(image)[0]
-            result.append(1/(time.time()-st))
-            print(np.mean(result), np.std(result))
+                
+            if i>0:
+                result.append(1/(time.time()-st))
+                print(np.mean(result), np.std(result))
 
             # compute image IoU metric
             inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
