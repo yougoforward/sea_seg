@@ -68,7 +68,7 @@ def test(args):
     metric = utils.SegmentationMetric(testset.num_class)
 
     tbar = tqdm(test_data)
-    total_inter, total_union, total_correct, total_label, all_label = 0, 0, 0, 0
+    total_inter, total_union, total_correct, total_label, all_label = 0, 0, 0, 0, 0
 
     for i, (image, dst) in enumerate(tbar):
         # print(dst)
