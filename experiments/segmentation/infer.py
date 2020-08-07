@@ -74,12 +74,12 @@ def test(args):
         # print(dst)
         with torch.no_grad():
             outputs = evaluator.parallel_forward(image)[0]
-            correct, labeled = utils.batch_pix_accuracy(outputs, dst[0])
+            correct, labeled = batch_pix_accuracy(outputs, dst[0])
             total_correct += correct
             all_label += labeled
             img_pixAcc = 1.0 * correct / (np.spacing(1) + labeled)
 
-            inter, union, area_pred, area_lab = utils.batch_intersection_union(outputs, dst[0], testset.num_class)
+            inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
             total_label += area_lab
             total_inter += inter
             total_union += union
