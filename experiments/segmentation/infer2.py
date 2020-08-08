@@ -106,7 +106,7 @@ def test(args):
                 
             if i>20:
                 result.append(1/(time.time()-st))
-                print(np.mean(result), np.std(result))
+                # print(np.mean(result), np.std(result))
 
     #         # compute image IoU metric
     #         inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
@@ -126,7 +126,8 @@ def test(args):
     # print("set Classes pixAcc:", pixAcc)
     # print("set Classes IoU:", IoU)
     # print("set mean IoU:", mIoU)
-
+    print(np.mean(result), np.std(result))
+    
 if __name__ == "__main__":
     args = Options().parse()
     torch.manual_seed(args.seed)
