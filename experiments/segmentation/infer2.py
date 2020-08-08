@@ -108,25 +108,33 @@ def test(args):
                 result.append(1/(time.time()-st))
                 print(np.mean(result), np.std(result))
 
-            # compute image IoU metric
-            inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
-            total_label += area_lab
-            total_inter += inter
-            total_union += union
+            if 'val' in args.mode:
+                # compute image IoU metric
+                inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
+                total_label += area_lab
+                total_inter += inter
+                total_union += union
 
-            class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
-            class_IoU = 1.0 * inter / (np.spacing(1) + union)
-            print("img Classes pixAcc:", class_pixAcc)
-            print("img Classes IoU:", class_IoU)
-    # compute set IoU metric
-    pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
-    IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
-    mIoU = IoU.mean()
+                class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
+                class_IoU = 1.0 * inter / (np.spacing(1) + union)
+                print("img Classes pixAcc:", class_pixAcc)
+                print("img Classes IoU:", class_IoU)
+            else:
+                # save prediction results
+                predict = testset.make_pred(torch.max(output, 1)[1].cpu().numpy())
+                mask = utils.get_mask_pallete(predict, args.dataset)
+                outname = os.path.splitext(dst[0])[0] + '.png'
+                mask.save(os.path.join(outdir, outname))
 
-    print("set Classes pixAcc:", pixAcc)
-    print("set Classes IoU:", IoU)
-    print("set mean IoU:", mIoU)
-    # print(np.mean(result), np.std(result))
+    if 'val' in args.mode:
+        # compute set IoU metric
+        pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
+        IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
+        mIoU = IoU.mean()
+
+        print("set Classes pixAcc:", pixAcc)
+        print("set Classes IoU:", IoU)
+        print("set mean IoU:", mIoU)
 
 if __name__ == "__main__":
     args = Options().parse()
