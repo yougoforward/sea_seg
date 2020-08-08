@@ -106,28 +106,28 @@ def test(args):
                 
             if i>20:
                 result.append(1/(time.time()-st))
-                # print(np.mean(result), np.std(result))
+                print(np.mean(result), np.std(result))
 
-    #         # compute image IoU metric
-    #         inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
-    #         total_label += area_lab
-    #         total_inter += inter
-    #         total_union += union
+            # compute image IoU metric
+            inter, union, area_pred, area_lab = batch_intersection_union(outputs, dst[0], testset.num_class)
+            total_label += area_lab
+            total_inter += inter
+            total_union += union
 
-    #         class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
-    #         class_IoU = 1.0 * inter / (np.spacing(1) + union)
-    #         print("img Classes pixAcc:", class_pixAcc)
-    #         print("img Classes IoU:", class_IoU)
-    # # compute set IoU metric
-    # pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
-    # IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
-    # mIoU = IoU.mean()
+            class_pixAcc = 1.0 * inter / (np.spacing(1) + area_lab)
+            class_IoU = 1.0 * inter / (np.spacing(1) + union)
+            print("img Classes pixAcc:", class_pixAcc)
+            print("img Classes IoU:", class_IoU)
+    # compute set IoU metric
+    pixAcc = 1.0 * total_inter / (np.spacing(1) + total_label)
+    IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
+    mIoU = IoU.mean()
 
-    # print("set Classes pixAcc:", pixAcc)
-    # print("set Classes IoU:", IoU)
-    # print("set mean IoU:", mIoU)
-    print(np.mean(result), np.std(result))
-    
+    print("set Classes pixAcc:", pixAcc)
+    print("set Classes IoU:", IoU)
+    print("set mean IoU:", mIoU)
+    # print(np.mean(result), np.std(result))
+
 if __name__ == "__main__":
     args = Options().parse()
     torch.manual_seed(args.seed)
